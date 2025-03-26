@@ -9,10 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 
 const Login = () => {
@@ -46,7 +43,6 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       // Navigation will be handled by the auth state listener in App.js
     } catch (error) {
-      console.error("Login error:", error);
       let errorMessage = "Login failed. Please try again.";
 
       if (error.code === "auth/invalid-credential") {
@@ -55,35 +51,6 @@ const Login = () => {
         errorMessage = "No account found with this email";
       } else if (error.code === "auth/wrong-password") {
         errorMessage = "Incorrect password";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email format";
-      }
-
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleForgotPassword = async () => {
-    if (!email) {
-      setError("Please enter your email to reset password");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      await sendPasswordResetEmail(auth, email);
-      Alert.alert(
-        "Password Reset Email Sent",
-        "Check your email for instructions to reset your password."
-      );
-    } catch (error) {
-      console.error("Reset password error:", error);
-      let errorMessage = "Failed to send reset email";
-
-      if (error.code === "auth/user-not-found") {
-        errorMessage = "No account found with this email";
       } else if (error.code === "auth/invalid-email") {
         errorMessage = "Invalid email format";
       }
@@ -136,10 +103,6 @@ const Login = () => {
       >
         {loading ? <ActivityIndicator color="white" className="mr-2" /> : null}
         <Text className="text-white text-center text-lg font-bold">Login</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleForgotPassword} className="mt-4">
-        <Text className="text-white text-base">Forgot Password?</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

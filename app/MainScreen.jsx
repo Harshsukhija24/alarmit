@@ -11,9 +11,7 @@ import AlarmService from "./components/AlarmService";
 
 const Tab = createBottomTabNavigator();
 
-const MainScreen = ({ route }) => {
-  const { resetAudioSystem } = route.params || {};
-
+const MainScreen = () => {
   return (
     <>
       <Tab.Navigator
@@ -45,14 +43,10 @@ const MainScreen = ({ route }) => {
         <Tab.Screen name="Sleep" component={SleepScreen} />
         <Tab.Screen name="Report" component={Report} />
         <Tab.Screen name="Morning" component={MorningScreen} />
-        <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          initialParams={{ resetAudioSystem }}
-        />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
 
-      <AlarmService resetAudioSystem={resetAudioSystem} />
+      <AlarmService />
     </>
   );
 };

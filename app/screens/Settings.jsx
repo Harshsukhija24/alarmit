@@ -17,7 +17,6 @@ import AuthGuard from "../components/AuthGuard";
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { resetAudioSystem } = route.params || {};
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState(null);
   const [settings, setSettings] = useState({
@@ -55,12 +54,8 @@ const SettingsScreen = () => {
         onPress: async () => {
           try {
             setLoading(true);
-            const result = await signOutUser();
-            if (result.success) {
-              navigation.replace("Login");
-            } else {
-              Alert.alert("Error", result.error || "Failed to sign out");
-            }
+            await signOutUser();
+            // Navigation will be handled by App.js auth observer
           } catch (error) {
             Alert.alert("Error", "Failed to sign out");
             console.error(error);
@@ -70,42 +65,6 @@ const SettingsScreen = () => {
         },
       },
     ]);
-  };
-
-  const handleResetAudio = () => {
-    Alert.alert(
-      "Reset Audio System",
-      "This will reset the audio system which may help if you're experiencing sound issues with alarms. Continue?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Reset Audio",
-          style: "destructive",
-          onPress: async () => {
-            if (resetAudioSystem && typeof resetAudioSystem === "function") {
-              try {
-                await resetAudioSystem();
-                Alert.alert(
-                  "Audio Reset",
-                  "Audio system has been reset successfully."
-                );
-              } catch (error) {
-                console.error("Error resetting audio:", error);
-                Alert.alert(
-                  "Reset Failed",
-                  "There was a problem resetting the audio system."
-                );
-              }
-            } else {
-              Alert.alert(
-                "Not Available",
-                "Audio reset function is not available in this session. Please restart the app."
-              );
-            }
-          },
-        },
-      ]
-    );
   };
 
   const toggleSetting = (setting) => {
@@ -134,13 +93,6 @@ const SettingsScreen = () => {
           {/* User Account Section */}
           <View className="bg-gray-800 p-5 rounded-xl mb-6">
             <Text className="text-gray-400 font-medium mb-4">ACCOUNT</Text>
-
-            <View className="bg-gray-700 p-4 rounded-lg mb-3">
-              <Text className="text-white text-lg">
-                {userProfile?.displayName || "User"}
-              </Text>
-              <Text className="text-gray-400">{userProfile?.email}</Text>
-            </View>
 
             <TouchableOpacity
               className="bg-red-600 py-3 mt-2 rounded-lg items-center"
@@ -233,20 +185,6 @@ const SettingsScreen = () => {
                 thumbColor={settings.dailyStats ? "#f4f3f4" : "#f4f3f4"}
               />
             </View>
-
-            {/* Audio Reset Option */}
-            <TouchableOpacity
-              className="flex-row items-center bg-gray-700 p-3 rounded-lg mt-2"
-              onPress={handleResetAudio}
-            >
-              <MaterialIcons name="refresh" size={24} color="#E53935" />
-              <Text className="text-white text-base ml-3">
-                Reset Audio System
-              </Text>
-            </TouchableOpacity>
-            <Text className="text-gray-500 text-xs mt-2">
-              Use this if you're experiencing issues with alarm sounds
-            </Text>
           </View>
 
           {/* About Section */}

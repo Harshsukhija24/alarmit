@@ -12,7 +12,7 @@ import { db, auth } from "../../firebaseConfig";
 import MissionModal from "./MissionModal";
 import { playSound, stopSound, isAudioPlaying } from "../utils/AudioManager";
 
-const AlarmService = ({ resetAudioSystem }) => {
+const AlarmService = () => {
   const [showMission, setShowMission] = useState(false);
   const [currentAlarm, setCurrentAlarm] = useState(null);
   const [alarmInterval, setAlarmInterval] = useState(null);
@@ -193,12 +193,6 @@ const AlarmService = ({ resetAudioSystem }) => {
       await stopSound();
     } catch (error) {
       console.error("Error stopping sound:", error);
-
-      // If we encounter an error stopping the sound, try resetting the audio system
-      if (resetAudioSystem) {
-        console.log("Attempting audio system reset");
-        resetAudioSystem();
-      }
     }
 
     // Cancel vibration

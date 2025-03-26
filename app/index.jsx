@@ -12,7 +12,7 @@ import { View, ActivityIndicator } from "react-native";
 
 const Stack = createStackNavigator();
 
-export default function Router({ resetAudioSystem }) {
+export default function Router() {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -49,11 +49,7 @@ export default function Router({ resetAudioSystem }) {
       <Stack.Screen name="GetStarted" component={GetStarted} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
-      <Stack.Screen
-        name="MainScreen"
-        component={MainScreen}
-        initialParams={{ resetAudioSystem }}
-      />
+      <Stack.Screen name="MainScreen" component={MainScreen} />
       <Stack.Screen
         name="Settings"
         component={SettingsScreen}

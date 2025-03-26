@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { Alert } from "react-native";
 import { Audio } from "expo-av";
-import { onAuthStateChanged } from "firebase/auth"; 
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 
 // Screens
@@ -127,37 +127,6 @@ export default function App() {
     };
   }, []);
 
-  // Function to reset audio system - can be called as needed
-  const resetAudioSystem = async () => {
-    try {
-      Alert.alert(
-        "Resetting Audio",
-        "Attempting to reset the audio system...",
-        [{ text: "OK" }]
-      );
-
-      await Audio.setIsEnabledAsync(false);
-      await forceClearAudio();
-      await Audio.setIsEnabledAsync(true);
-
-      // Set audio mode for alarms
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        staysActiveInBackground: true,
-        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
-        playsInSilentModeIOS: true,
-        shouldDuckAndroid: true,
-        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DUCK_OTHERS,
-        playThroughEarpieceAndroid: false,
-      });
-
-      Alert.alert("Success", "Audio system reset successfully");
-    } catch (error) {
-      console.error("Failed to reset audio:", error);
-      Alert.alert("Error", "Failed to reset audio system: " + error.message);
-    }
-  };
-
   if (!appReady || initializing) {
     return null; // Or a loading screen
   }
@@ -194,7 +163,7 @@ export default function App() {
           </>
         )}
       </Stack.Navigator>
-      {user && <AlarmService resetAudioSystem={resetAudioSystem} />}
+      {user && <AlarmService />}
     </NavigationContainer>
   );
 }
